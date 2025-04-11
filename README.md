@@ -8,6 +8,9 @@ conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvi
 pip install submodules/diff-surfel-rasterization
 pip install submodules/simple-knn
 
+# missing pip installs after error
+pip install open3d==0.18.0 mediapy==1.1.2 lpips==0.1.4 scikit-image==0.21.0 tqdm==4.66.2 trimesh==4.3.2 plyfile opencv-python
+
 ```
 
 
