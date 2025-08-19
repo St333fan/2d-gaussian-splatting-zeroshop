@@ -1,6 +1,5 @@
 # Problems solved from original Git when installing
-
-```
+```bash
 # when conda submodules fail to install because of pytorch cuda install, install in conda env...
 conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
 
@@ -13,7 +12,18 @@ pip install open3d==0.18.0 mediapy==1.1.2 lpips==0.1.4 scikit-image==0.21.0 tqdm
 
 ```
 
+# Run One Example, with masks --> png Files with RGBA (alpha channel)
+```bash
+python train_alpha.py --source_path <colmap_path> --model_path  <colmap_path>/2DGS_output
+python render.py --source_path <colmap_path> --model_path  <colmap_path>/2DGS_output
+```
 
+# Process ZeroShop dataset, with masks --> png Files with RGBA (alpha channel)
+```bash
+chmod +x process_all_ycbv.sh
+# before processing, adapt the dataset path, segmented/surface, mast3r-sfm/vggt
+./process_all_ycbv.sh
+```
 
 # 2D Gaussian Splatting for Geometrically Accurate Radiance Fields
 
