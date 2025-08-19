@@ -11,21 +11,21 @@ pip install submodules/simple-knn
 pip install open3d==0.18.0 mediapy==1.1.2 lpips==0.1.4 scikit-image==0.21.0 tqdm==4.66.2 trimesh==4.3.2 plyfile opencv-python
 
 ```
-
-# Run One Example, with masks --> png Files with RGBA (alpha channel)
+# Process 
+## Run One Example, with masks --> png Files with RGBA (alpha channel)
 ```bash
 python train_alpha.py --source_path <colmap_path> --model_path  <colmap_path>/2DGS_output
 python render.py --source_path <colmap_path> --model_path  <colmap_path>/2DGS_output
 ```
 
-# Process ZeroShop dataset, with masks --> png Files with RGBA (alpha channel)
+## Process ZeroShop dataset, with masks --> png Files with RGBA (alpha channel)
 ```bash
 chmod +x process_all_ycbv.sh
 # before processing, adapt the dataset path, segmented/surface, mast3r-sfm/vggt
 ./process_all_ycbv.sh
 ```
 
-# 2D Gaussian Splatting for Geometrically Accurate Radiance Fields
+# Original Git --> 2D Gaussian Splatting for Geometrically Accurate Radiance Fields
 
 [Project page](https://surfsplatting.github.io/) | [Paper](https://arxiv.org/pdf/2403.17888) | [Video](https://www.youtube.com/watch?v=oaHCtB6yiKU) | [Surfel Rasterizer (CUDA)](https://github.com/hbb1/diff-surfel-rasterization) | [Surfel Rasterizer (Python)](https://colab.research.google.com/drive/1qoclD7HJ3-o0O1R8cvV3PxLhoDCMsH8W?usp=sharing) | [DTU+COLMAP (3.5GB)](https://drive.google.com/drive/folders/1SJFgt8qhQomHX55Q4xSvYE2C6-8tFll9) | [SIBR Viewer Pre-built for Windows](https://drive.google.com/file/d/1DRFrtFUfz27QvQKOWbYXbRS2o2eSgaUT/view?usp=sharing) | [Web Viewer](https://github.com/mkkellogg/GaussianSplats3D) <br>
 
