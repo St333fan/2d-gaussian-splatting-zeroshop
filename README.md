@@ -1,4 +1,4 @@
-# Problems solved from original Git when installing
+# Problems solved from the original Git when installing
 ```bash
 # when conda submodules fail to install because of pytorch cuda install, install in conda env...
 conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
@@ -11,12 +11,18 @@ pip install submodules/simple-knn
 pip install open3d==0.18.0 mediapy==1.1.2 lpips==0.1.4 scikit-image==0.21.0 tqdm==4.66.2 trimesh==4.3.2 plyfile opencv-python
 
 ```
-# Process 
+# Get Started with ZeroSop 2DGS Meshing (first Setup Repo, scroll down)
 ## Run One Example, with masks --> png Files with RGBA (alpha channel)
 ```bash
 python train_alpha.py --source_path <colmap_path> --model_path  <colmap_path>/2DGS_output
 python render.py --source_path <colmap_path> --model_path  <colmap_path>/2DGS_output
 ```
+
+### Generate Camera-Registration for ZeroShop
+
+https://github.com/St333fan/mast3r-zeroshop
+
+https://github.com/St333fan/vggt-zeroshop
 
 ## Process ZeroShop dataset, with masks --> png Files with RGBA (alpha channel)
 ```bash
