@@ -32,8 +32,16 @@ def post_process_mesh(mesh, cluster_to_keep=1000):
     triangle_clusters = np.asarray(triangle_clusters)
     cluster_n_triangles = np.asarray(cluster_n_triangles)
     cluster_area = np.asarray(cluster_area)
+    num_clusters = len(cluster_n_triangles)
+
+    if cluster_to_keep > num_clusters:
+        print(f"Not enough clusters ({num_clusters}) to keep {cluster_to_keep}. Keeping all clusters.")
+        cluster_to_keep = num_clusters
+
+    # Find the threshold: the Nth largest cluster size
     n_cluster = np.sort(cluster_n_triangles.copy())[-cluster_to_keep]
-    n_cluster = max(n_cluster, 50) # filter meshes smaller than 50
+    n_cluster = max(n_cluster, 50)  # filter meshes smaller than 50
+
     triangles_to_remove = cluster_n_triangles[triangle_clusters] < n_cluster
     mesh_0.remove_triangles_by_mask(triangles_to_remove)
     mesh_0.remove_unreferenced_vertices()
@@ -220,7 +228,7 @@ class GaussianExtractor(object):
             else:
                 sdf_trunc = 5 * voxel_size
 
-            tsdfs = torch.ones_like(samples[:,0]) * (-1)
+            tsdfs = torch.ones_like(samples[:,0]) * 1
             rgbs = torch.zeros((samples.shape[0], 3)).cuda()
 
             weights = torch.ones_like(samples[:,0])
