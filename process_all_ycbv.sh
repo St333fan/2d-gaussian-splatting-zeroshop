@@ -4,14 +4,17 @@
 # This script runs training and rendering for both segmented and surface variants
 
 # Base path where all object directories are located
-BASE_PATH="/home/stefan/Downloads/dataset_test_real_labor"
+BASE_PATH="/home/stefan/Projects/BlenderProcRenderBOP/ycbv_fr_zeroshop_dataset"
 
 # Set to true or false to enable/disable processing of each variant
 PROCESS_SURFACE=true
 PROCESS_SEGMENTED=false
 
+# Set Rendering Resolution
+RESOLUTION = 400 # don't go higher than 1600
+
 # Choose the parent folder for variants: 'mast3r-sfm' or 'vggt'
-VARIANT_PARENT="mast3r-sfm"  # or 'vggt'
+VARIANT_PARENT="mast3r-sfm"  # or 'mast3r-sfm'
 
 # Path to the training and rendering scripts
 TRAIN_ALPHA_SCRIPT="train_alpha.py"
@@ -66,8 +69,8 @@ process_variant() {
 
     local model_output_path="$variant_path/2DGS_output"
     echo "  Step 1: Training $variant..."
-    echo "  Running: python $TRAIN_ALPHA_SCRIPT --source_path $variant_path --model_path $model_output_path"
-    if ! python "$TRAIN_ALPHA_SCRIPT" --source_path "$variant_path" --model_path "$model_output_path"; then
+    echo "  Running: python $TRAIN_ALPHA_SCRIPT --source_path $variant_path --model_path $model_output_path --resolution $RESOLUTION"
+    if ! python "$TRAIN_ALPHA_SCRIPT" --source_path "$variant_path" --model_path "$model_output_path" --resolution $RESOLUTION; then
         echo "  ✗ Failed to train $variant for obj_$obj_num"
         return 1
     fi
