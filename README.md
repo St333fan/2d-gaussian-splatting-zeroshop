@@ -1,9 +1,25 @@
 # Problems solved from the original Git when installing
 ```bash
+# create a new environment
+conda env create --file environment.yml
+conda activate surfel_splatting
+
 # when conda submodules fail to install because of pytorch cuda install, install in conda env...
+conda install pytorch torchvision torchaudio pytorch-cuda=11.8 -c pytorch -c nvidia
+conda install nvidia/label/cuda-11.8.0::cuda
+conda install nvidia/label/cuda-11.8.0::cuda-toolkit
+
+# my PC with local cuda install, dont do this unless you want!
 conda install pytorch torchvision torchaudio pytorch-cuda=12.1 -c pytorch -c nvidia
 
-# exchange scripts_error with original scripts, and then...
+# point CUDA_HOME to the conda env (nvcc from cudatoolkit-dev will be under $CONDA_PREFIX), 
+export CUDA_HOME="$CONDA_PREFIX"
+export PATH="$CUDA_HOME/bin:$PATH"
+export LD_LIBRARY_PATH="$CUDA_HOME/lib:$CUDA_HOME/lib64:$LD_LIBRARY_PATH"
+
+# exchange scripts_error with original scripts, and then install
+cp -v scripts_error/general_utils.py utils/
+cp -v scripts_error/simple_knn.cu submodules/simple-knn/
 pip install submodules/diff-surfel-rasterization
 pip install submodules/simple-knn
 
