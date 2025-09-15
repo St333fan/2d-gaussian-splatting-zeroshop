@@ -4,14 +4,15 @@
 # This script runs training and rendering for both segmented and surface variants
 
 # Base path where all object directories are located
-BASE_PATH="/home/stefan/Projects/BlenderProcRenderBOP/ycbv_fr_zeroshop_dataset"
+BASE_PATH="/home/stefan/Projects/Grounded-SAM-2-zeroshop/dataset"
 
 # Set to true or false to enable/disable processing of each variant
 PROCESS_SURFACE=true
 PROCESS_SEGMENTED=false
+POSTPROCESSING=true
 
 # Set Rendering Resolution
-RESOLUTION = 400 # don't go higher than 1600
+RESOLUTION=400 # 1600 for best
 
 # Choose the parent folder for variants: 'mast3r-sfm' or 'vggt'
 VARIANT_PARENT="mast3r-sfm"  # or 'mast3r-sfm'
@@ -85,6 +86,58 @@ process_variant() {
         return 1
     fi
     echo "  ✓ Rendering completed for $variant"
+    
+    # Post-processing mesh if enabled
+    if [ "$POSTPROCESSING" = true ]; then
+        echo "  Step 3: Post-processing mesh for $variant..."
+
+        # Activate pymeshlab environment
+        source ~/miniconda3/etc/profile.d/conda.sh
+        conda activate postprocess
+
+        bundler_file="$variant_path/images/scene.bundle.out"
+        bundler_txt="$variant_path/images/scene.list.txt"
+        object_info_json="$obj_path/scene/output/object_info.json"
+
+        # Find mesh file in 2DGS_output directory
+        mesh_dir="$variant_path/2DGS_output/train/ours_30000"
+        mesh_file=""
+        if [ -d "$mesh_dir" ]; then
+            # Prefer fuse_post.ply, fall back to fuse.ply
+            if [ -f "$mesh_dir/fuse_post.ply" ]; then
+                mesh_file="$mesh_dir/fuse_post.ply"
+            elif [ -f "$mesh_dir/fuse.ply" ]; then
+                mesh_file="$mesh_dir/fuse.ply"
+            fi
+        fi
+
+        if [ -z "$mesh_file" ]; then
+            echo "  Warning: No mesh file found for post-processing in $mesh_dir"
+            return 1
+        fi
+
+        if [ ! -f "$bundler_file" ] || [ ! -f "$bundler_txt" ]; then
+            echo "  Warning: Bundler files not found for post-processing."
+            return 1
+        fi
+
+        if [ ! -f "$object_info_json" ]; then
+            echo "  Warning: object_info.json not found for post-processing."
+            return 1
+        fi
+
+        echo "  Running: python postprocess.py --mesh \"$mesh_file\" --bundler \"$bundler_file\" --bundler_txt \"$bundler_txt\" --object_info_json \"$object_info_json\""
+        if ! python postprocess.py --mesh "$mesh_file" --bundler "$bundler_file" --bundler_txt "$bundler_txt" --object_info_json "$object_info_json" --texture; then
+            echo "  ✗ Failed to post-process mesh for $variant of obj_$obj_num"
+            return 1
+        fi
+
+        echo "  ✓ Post-processing completed for $variant"
+
+        # Return to original environment
+        conda activate surfel_splatting
+    fi
+    
     return 0
 }
 
